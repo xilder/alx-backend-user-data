@@ -7,11 +7,13 @@ import re
 
 
 def filter_datum(
-        fields: List[str],
-        redaction: str, messages: str,
-        separator: str
-    ) -> str:
+    fields: List[str],
+    redaction: str,
+    message: str,
+    separator: str
+) -> str:
     """obfuscates certain parameters"""
-    for field in fields:
-        messages = re.sub(f"{field}=.*?{separator}", f"{field}={redaction}{separator}", messages)
-    return messages
+    for f in fields:
+        message = re.sub(f"{f}=.*?{separator}",
+                         f"{f}={redaction}{separator}", message)
+    return message
