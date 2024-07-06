@@ -41,3 +41,4 @@ class RedactingFormatter(logging.Formatter):
             self.SEPARATOR
         )
         return record.msg
+    
