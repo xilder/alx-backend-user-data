@@ -2,7 +2,7 @@
 """obfuscates certain data fields"""
 
 import logging
-from logging import Logger
+import logging.Logger
 from typing import List
 import re
 
@@ -23,7 +23,7 @@ def filter_datum(
     return message
 
 
-def get_logger() -> Logger:
+def get_logger() -> logging.Logger:
     """returns a logger object"""
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
@@ -42,7 +42,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: List[str]) -> str:
+    def __init__(self, fields: List[str]):
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
