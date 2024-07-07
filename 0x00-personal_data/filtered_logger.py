@@ -4,9 +4,29 @@
 import logging
 from typing import List
 import re
+import os
+import mysql.connector
 
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """returns a MySQLConnection object for accessing a db"""
+    db_config = {
+        "user": os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+        "host": os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
+        "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+        "database": os.getenv("PERSONAL_DATA_DB_NAME", ""),
+    }
+    # host = os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+    # user = os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
+    # password = os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+    # database = os.getenv("PERSONAL_DATA_DB_NAME"),
+
+
+    cnx = mysql.connector.connection.MySQLConnection(**db_config)
+    return cnx
 
 
 def filter_datum(
