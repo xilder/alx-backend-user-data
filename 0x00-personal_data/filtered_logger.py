@@ -2,7 +2,6 @@
 """obfuscates certain data fields"""
 
 import logging
-import logging.Logger
 from typing import List
 import re
 
