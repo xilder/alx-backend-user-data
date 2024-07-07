@@ -11,6 +11,20 @@ import mysql.connector
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
+def main():
+    """retrieves all the users in a database and prints them"""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    field_names = [i[0] for i in cursor.description]
+    logger = get_logger()
+    for row in cursor:
+        str_row = "".join(f"{f}={str(r)}; " for r, f in zip(row, field_names))
+        logger.info(str_row.strip())
+    cursor.close()
+    db.close()
+
+
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """returns a MySQLConnection object for accessing a db"""
     db_config = {
@@ -19,10 +33,6 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         "password": os.getenv("PERSONAL_DATA_DB_PASSWORD", "root"),
         "database": os.getenv("PERSONAL_DATA_DB_NAME", ""),
     }
-    # host = os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
-    # user = os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
-    # password = os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
-    # database = os.getenv("PERSONAL_DATA_DB_NAME"),
 
     cnx = mysql.connector.connection.MySQLConnection(**db_config)
     return cnx
@@ -69,3 +79,7 @@ class RedactingFormatter(logging.Formatter):
         record.msg = filter_datum(self.fields, self.REDACTION,
                                   record.getMessage(), self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
+
+
+if __name__ == "__main__":
+    main()
