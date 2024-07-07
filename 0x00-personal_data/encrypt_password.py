@@ -5,7 +5,7 @@ Password Encryption and Validation Module
 import bcrypt
 
 
-def hash_passwd(password: str) -> bytes:
+def hash_password(password: str) -> bytes:
     """
     Generates a salted and hashed password.
 
