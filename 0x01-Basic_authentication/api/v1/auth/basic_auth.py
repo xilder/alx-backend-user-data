@@ -28,8 +28,8 @@ class BasicAuth(Auth):
 
         return auth
 
-    def decode_base64_authorization_header(
-            self,
-            base64_authorization_header: str,
-    ) -> str:
-        pass
+    # def decode_base64_authorization_header(
+    #         self,
+    #         base64_authorization_header: str,
+    # ) -> str:
+    #     pass
