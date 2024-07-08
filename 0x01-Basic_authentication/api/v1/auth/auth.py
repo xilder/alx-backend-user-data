@@ -16,8 +16,10 @@ class Auth:
         """returns False"""
         if not path or not excluded_paths:
             return True
+
         if path in excluded_paths:
             return False
+
         for excluded_path in excluded_paths:
             if excluded_path.startswith(path):
                 return False
@@ -26,11 +28,20 @@ class Auth:
             elif excluded_path[-1] == "*":
                 if path.startswith(excluded_path[:-1]):
                     return False
+
         return True
 
     def authorization_header(self, request=None) -> str:
         """returns None"""
-        return None
+        if request is None:
+            return None
+
+        authorization = request.headers.get('Authorization', None)
+
+        if authorization is None:
+            return None
+
+        return authorization
 
     def current_user(self, request=None) -> TypeVar('User'):
         """"returns None"""
