@@ -20,7 +20,7 @@ auth = None
 
 if AUTH_TYPE == 'auth':
     auth = Auth()
-if AUTH_TYPE == 'basic_auth':
+elif AUTH_TYPE == 'basic_auth':
     auth = Basic_auth()
 
 
