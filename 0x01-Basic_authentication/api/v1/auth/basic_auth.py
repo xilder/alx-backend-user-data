@@ -64,5 +64,3 @@ class BasicAuth(Auth):
         email, password = params
 
         return (email, password)
-
-    dd
