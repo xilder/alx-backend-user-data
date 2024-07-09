@@ -73,10 +73,10 @@ class BasicAuth(Auth):
             user_pwd: str
     ) -> TypeVar('User'):
         """returns a user if found"""
-        if user_email is None:
+        if user_email is None or type(user_email) != str:
             return None
 
-        if user_pwd is None:
+        if user_pwd is None or type(user_pwd) != str:
             return None
 
         users = User.search()
