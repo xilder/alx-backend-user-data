@@ -62,7 +62,7 @@ class BasicAuth(Auth):
         if ':' not in decoded_base64_authorization_header:
             return (None, None)
 
-        params = decoded_base64_authorization_header.split(':')
+        params = decoded_base64_authorization_header.split(':', 1)
         email, password = params
 
         return (email, password)
@@ -79,15 +79,14 @@ class BasicAuth(Auth):
         if user_pwd is None or type(user_pwd) != str:
             return None
 
-        users = User.search()
         try:
+            users = User.search({"email": user_email})
             if not users or users == []:
                 return None
 
             for user in users:
                 if user.is_valid_password(user_pwd):
                     return user
-
             return None
         except Exception:
             return None
