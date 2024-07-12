@@ -11,7 +11,7 @@ class SessionDBAuth(SessionExpAuth):
     def create_session(self, user_id=None):
         """creates a new session"""
         session_id = super().create_session(user_id)
-        if type(session_id) == str or not session_id:
+        if type(session_id) != str or not session_id:
             return None
         kwargs = {
             "user_id": user_id,
@@ -38,7 +38,7 @@ class SessionDBAuth(SessionExpAuth):
         if exp_time < cur_time:
             return None
         return session[0].user_id
-    
+
     def destroy_session(self, request=None):
         """destroys the session"""
         session_id = self.session_cookie(request)
