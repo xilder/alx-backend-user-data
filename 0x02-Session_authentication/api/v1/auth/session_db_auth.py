@@ -43,7 +43,7 @@ class SessionDBAuth(SessionExpAuth):
         """destroys the session"""
         session_id = self.session_cookie(request)
         try:
-            session  = UserSession.search({"session_id": session_id})
+            session = UserSession.search({"session_id": session_id})
         except Exception:
             return False
         if not session:
