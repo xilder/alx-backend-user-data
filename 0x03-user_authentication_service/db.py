@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-"""database model"""
-
-
+#!/usr/bin/env python
 """DB module
 """
 from sqlalchemy import create_engine
@@ -35,7 +32,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password:str) -> User:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """adds a user to the database"""
         try:
             user = User(email=email, hashed_password=hashed_password)
