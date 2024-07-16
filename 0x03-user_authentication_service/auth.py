@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """auth module"""
+from uuid import uuid4
 from sqlalchemy.orm.exc import NoResultFound
 from db import DB
 from bcrypt import checkpw, hashpw, gensalt
@@ -41,3 +42,7 @@ class Auth:
         except NoResultFound:
             return False
         return checkpw(password.encode("utf-8"), user.hashed_password)
+
+    def _generate_uuid() -> str:
+        """generates a random uuid"""
+        return str(uuid4())
