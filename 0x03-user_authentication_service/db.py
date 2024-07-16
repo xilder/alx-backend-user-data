@@ -54,14 +54,14 @@ class DB:
 
     def update_user(self, user_id: int, **kwargs):
         """updates a user with updated values"""
-        user = self.find_user_by()
+        user = self.find_user_by(id=user_id)
         if not user:
-            return
+            return None
 
         for k, v in kwargs.items():
             if not hasattr(user, k):
                 raise ValueError
-            user[k] = v
-        self._session.add(user)
+            setattr(user, k, v)
         self._session.commit()
+        return None
 
