@@ -2,7 +2,7 @@
 """auth module"""
 from sqlalchemy.orm.exc import NoResultFound
 from db import DB
-from bcrypt import hashpw, gensalt
+from bcrypt import checkpw, hashpw, gensalt
 from user import User
 
 
@@ -33,3 +33,11 @@ class Auth:
             hashed_password=_hash_password(password)
         )
         return user
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """checks if a user's credentials are valid for login"""
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
+            return False
+        return checkpw(password.encode("utf-8"), user.hashed_password)
