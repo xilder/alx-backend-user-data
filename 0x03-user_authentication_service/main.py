@@ -14,13 +14,13 @@ BASE_URL = "http://0.0.0.0:5000"
 def register_user(email: str, password: str) -> None:
     """validates the registration function"""
     data = {
-        'email': EMAIL,
-        'password': PASSWD
+        'email': email,
+        'password': password
     }
     URL = f'{BASE_URL}/users'
     r = requests.post(URL, data=data)
-    # assert r.status_code == 200
-    # assert r.json() == {'email': EMAIL, 'message': 'user created'}
+    assert r.status_code == 200
+    assert r.json() == {'email': EMAIL, 'message': 'user created'}
     r = requests.post(URL, data=data)
     assert r.status_code == 400
     assert r.json() == {'message': 'email already registered'}
@@ -29,8 +29,8 @@ def register_user(email: str, password: str) -> None:
 def log_in_wrong_password(email: str, password: str) -> None:
     """checks for wrong password"""
     data = {
-        'email': EMAIL,
-        'password': NEW_PASSWD
+        'email': email,
+        'password': password
     }
     URL = f'{BASE_URL}/sessions'
     r = requests.post(URL, data=data)
@@ -51,12 +51,14 @@ def log_in(email: str, password: str) -> str:
 
 
 def profile_unlogged() -> None:
+    """test the profile route"""
     URL = f'{BASE_URL}/profile'
     r = requests.get(URL)
     assert r.status_code == 403
 
 
 def profile_logged(session_id: str) -> None:
+    """test the profile route"""
     URL = f'{BASE_URL}/profile'
     cookie = {
         'session_id': session_id
@@ -73,13 +75,31 @@ def log_out(session_id: str) -> None:
         'session_id': session_id
     }
     r = requests.delete(URL, cookies=cookie)
-    assert r.cookies.get('session_id') == None
+    assert r.cookies.get('session_id') is None
     assert r.status_code == 200
 
 
 def reset_password_token(email: str) -> str:
     """tests the reset token route"""
     URL = f'{BASE_URL}/reset_password'
+    data = {'email': EMAIL}
+    r = requests.post(URL, data=data)
+    assert r.status_code == 200
+    token = r.json().get('reset_token')
+    return token
+
+
+def update_password(email: str, reset_token: str, new_password: str) -> None:
+    """test the update password route"""
+    URL = F'{BASE_URL}/reset_password'
+    data = {
+        'email': EMAIL,
+        'reset_token': reset_token,
+        'new_password': NEW_PASSWD
+    }
+    r = requests.put(URL, data=data)
+    assert r.status_code == 200
+    assert r.json() == {"email": EMAIL, "message": "Password updated"}
 
 
 if __name__ == "__main__":
@@ -90,6 +110,6 @@ if __name__ == "__main__":
     session_id = log_in(EMAIL, PASSWD)
     profile_logged(session_id)
     log_out(session_id)
-    # reset_token = reset_password_token(EMAIL)
-    # update_password(EMAIL, reset_token, NEW_PASSWD)
-    # log_in(EMAIL, NEW_PASSWD)
+    reset_token = reset_password_token(EMAIL)
+    update_password(EMAIL, reset_token, NEW_PASSWD)
+    log_in(EMAIL, NEW_PASSWD)
